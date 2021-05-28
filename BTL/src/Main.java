@@ -72,7 +72,6 @@ public class Main {
                     k--;
                 }
                 else {
-
                     for(int j = 0; j < 8 ; j++){
                         b[j][i] =  array[i-h][7-j];
                     }
@@ -102,8 +101,50 @@ public class Main {
         }
         return b;
     }
-    public static  int[] PC_1(long k_array_binary[]){
+    public static int[] HoanViArray_K_PC_1(int[][] K_key){
+        int[] tmp = new int[56];
+        int k=0;
+        for(int i = 0 ; i < 9 ; i++){
+            if(i==4){
+                break;
+            }
+            for(int j = 7 ; j >= 0 ; j--){
+                if(i == 3 && j == 3){
+                    break;
+                }
+                tmp[k++] = K_key[j][i];
+            }
+        }
+        for(int i = 6 ; i > 3; i--){
+            for(int j = 7 ; j >=0 ; j--){
+                if(i==3 && j==0){
+                    return tmp;
+                }
+                if(i == 3) {
+                    j = 4;
 
+                }
+                tmp[k++] = K_key[j][i];
+            }
+        }
+        return tmp;
+    }
+    public static  int[] PC_1(String K){
+
+        // tach chuoi thanh 2ky tu mot, mỗi cặp sẽ được chuyển thành nhị phân và cho vào dòng của mảng 2 chiều để hoán vị với Pc-1
+        String[] string_array_tmp = new String[8];
+        int g = 0;
+        for(int i = 0 ; i < K.length()-1;i+=2){
+            string_array_tmp[g++] = K.substring(i,i+2);
+        }
+
+        int[][] array_K_primary = new int[8][8];
+        for(int i = 0 ; i < 8 ; i++){
+            for(int  j = 0 ; j < 8 ; j++){
+                array_K_primary[i][j] =Integer.parseInt(String.valueOf(ConvertHexToBinary(string_array_tmp[i])[j]));
+            }
+
+        }
         int[][] PC1 = {
                 {57,49,41,33,25,17,9},
                 {1,58,50,42,34,26,18},
@@ -114,12 +155,16 @@ public class Main {
                 {14,6,61,53,45,37,29},
                 {21,13,5,28,20,12,4},
         };
-        int[][] K = new int[8][7];
-        for(int i = 0 ; i < 8 ; i++)
-            for(int j = 0 ; j < 7 ; j++)
-                K[i][j] = Integer.parseInt(String.valueOf(k_array_binary[PC1[i][j]-1]));
+        int[] tmp = HoanViArray_K_PC_1(array_K_primary);
+        int[][] K_ = new int[8][7];
+        int k=0;
+        for(int i = 0 ; i < 8 ; i++){
+            for(int j = 0 ; j < 7 ; j++){
+                K_[i][j] =  tmp[k++];
+            }
+        }
 
-        return ConvertArray_2_to_1(K,7,8);
+        return ConvertArray_2_to_1(K_,7,8);
     }
 
     public static int[][] ConverArray_1_to_2(long array[]){
@@ -144,9 +189,9 @@ public class Main {
     }
 
     public static int[][] CreateArrayKey(String K_KEY){
-        long[] k_array_binary = ConvertHexToBinary(K_KEY); // Chuyen Khoa K_KEY thanh chuoi nhi phan
 
-        int[] K = PC_1(k_array_binary); // Hoan vi khoa K theo phep PC-1
+
+        int[] K = PC_1(K_KEY); // Hoan vi khoa K theo phep PC-1
 
         //Tach Mang thanh 2 mang C va D.
         // Tim C1---C16
@@ -206,7 +251,6 @@ public class Main {
                         }
                         else
                             tmp[count] = D[count-28];
-
                     }
 
                     for(int j = 0 ; j < 48 ; j++){
@@ -514,9 +558,7 @@ public class Main {
                     break;
                 default: break;
             }
-
         }
-
         return C;
     }
 
@@ -666,8 +708,7 @@ public class Main {
 
         for(int i = 0 ; i < 8 ; i++){
             for(int  j = 0 ; j < 8 ; j++){
-
-                banMa_Decode[i][j] =Integer.parseInt(String.valueOf(ConvertHexToBinary(BanMa[i])[j]));
+                banMa_Decode[i][j] = Integer.parseInt(String.valueOf(ConvertHexToBinary(BanMa[i])[j]));
             }
 
         }
@@ -687,8 +728,7 @@ public class Main {
         }
 
 
-
-        int[][] arrayKey = CreateArrayKey(K_KEY);
+        int[][] arrayKey = CreateArrayKey(K_KEY); // tao array key
         for (int i = 0; i < 16; i++) {
             System.out.print("K " + (i + 1) + " = ");
             for (int j = 0; j < 48; j++) {
@@ -736,17 +776,17 @@ public class Main {
             else Result1[i] = R_Decode[i];
         }
 
-        // Chuyển mảng Result thành mảng 2 chi�?u để cho qua phép hoán vị IP-1
+        // Chuyển mảng Result thành mảng 2 chieu để cho qua phép hoán vị IP-1
         int[][] l1 = ConverArray_1_to_2(Result1);
 
-        // Chuyển mảng Result v�? mảng 1 chi�?u sau khi cho qua hoán vị IP-1
+        // Chuyển mảng Result ve mảng 1 chieu sau khi cho qua hoán vị IP-1
+
         int[]bm1 = ConvertArray_2_to_1(IP_1(l1),8,8);
 
         for(int i = 0 ; i < 64;i++){
             System.out.print(bm1[i]+" ");
         }
         return bm1;
-
     }
     public static String ResultDecode(String BANRO,String K_KEY){
         int[] bm = Decode(BANRO,K_KEY);
@@ -896,4 +936,5 @@ public class Main {
 
 
     }
+
 }
