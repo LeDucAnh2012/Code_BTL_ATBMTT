@@ -104,10 +104,8 @@ public class Main {
     public static int[] HoanViArray_K_PC_1(int[][] K_key){
         int[] tmp = new int[56];
         int k=0;
-        for(int i = 0 ; i < 9 ; i++){
-            if(i==4){
-                break;
-            }
+        for(int i = 0 ; i < 4 ; i++){
+
             for(int j = 7 ; j >= 0 ; j--){
                 if(i == 3 && j == 3){
                     break;
@@ -115,16 +113,19 @@ public class Main {
                 tmp[k++] = K_key[j][i];
             }
         }
-        for(int i = 6 ; i > 3; i--){
-            for(int j = 7 ; j >=0 ; j--){
-                if(i==3 && j==0){
+        for(int i = 6 ; i >= 3; i--){
+            int j = 7;
+            if(i == 3) {
+                j = 3;
+
+            }
+            for(  ; j >=0 ; j--){
+
+
+                tmp[k++] = K_key[j][i];
+                if(i==3 && j==1){
                     return tmp;
                 }
-                if(i == 3) {
-                    j = 4;
-
-                }
-                tmp[k++] = K_key[j][i];
             }
         }
         return tmp;
@@ -143,7 +144,6 @@ public class Main {
             for(int  j = 0 ; j < 8 ; j++){
                 array_K_primary[i][j] =Integer.parseInt(String.valueOf(ConvertHexToBinary(string_array_tmp[i])[j]));
             }
-
         }
         int[][] PC1 = {
                 {57,49,41,33,25,17,9},
@@ -155,14 +155,12 @@ public class Main {
                 {14,6,61,53,45,37,29},
                 {21,13,5,28,20,12,4},
         };
-        int[] tmp = HoanViArray_K_PC_1(array_K_primary);
         int[][] K_ = new int[8][7];
-        int k=0;
-        for(int i = 0 ; i < 8 ; i++){
-            for(int j = 0 ; j < 7 ; j++){
-                K_[i][j] =  tmp[k++];
-            }
-        }
+        int[] tmp = ConvertArray_2_to_1(array_K_primary,8,8);
+        for(int i = 0 ; i < 8 ; i++)
+            for(int j = 0 ; j < 7 ; j++)
+                K_[i][j] = Integer.parseInt(String.valueOf(tmp[PC1[i][j]-1]));
+
 
         return ConvertArray_2_to_1(K_,7,8);
     }
@@ -619,7 +617,11 @@ public class Main {
         for (int i = 0; i < L.length; i++) {
             R[i] = arraytmp[i + 32];
         }
-
+        System.out.println("");
+        for(int i =0 ; i < 32 ; i++){
+            System.out.print(L[i]+" ");
+        }
+        System.out.println("");
 
 
 
@@ -663,7 +665,11 @@ public class Main {
                 Result[i] = L[i-32];
             else Result[i] = R[i];
         }
-
+        System.out.println("");
+        for(int i =0 ; i < 32 ; i++){
+            System.out.print(L[i]+" ");
+        }
+        System.out.println("");
         // Chuyển mảng Result thành mảng 2 chi�?u để cho qua phép hoán vị IP-1
         int[][] l = ConverArray_1_to_2(Result);
 
